@@ -16,10 +16,15 @@ app.get("/", (req, res) => {
 
 app.post("/print", async (req, res) => {
   const data = req.body;
-  handlePrint(data);
-  res.sendStatus(200);
+  try {
+    handlePrint(data);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 });
-
-app.listen("3000", () => {
-  console.log("running on port 3000");
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log("running on port " + PORT);
 });

@@ -1,9 +1,9 @@
-function handlePrint(data) {
-  const escpos = require("escpos");
-  escpos.Network = require("escpos-network");
-  const device = new escpos.Network("192.168.123.100", 9100);
-  const printer = new escpos.Printer(device);
+const escpos = require("escpos");
+escpos.Network = require("escpos-network");
+const device = new escpos.Network("192.168.123.100", 9100);
+const printer = new escpos.Printer(device);
 
+function handlePrint(data) {
   const today = new Date().toLocaleString("en-GB", {
     timeZone: "Asia/Bangkok",
   });

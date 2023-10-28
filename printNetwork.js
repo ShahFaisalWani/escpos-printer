@@ -1,9 +1,10 @@
 const escpos = require("escpos");
 escpos.Network = require("escpos-network");
 const device = new escpos.Network("192.168.123.100", 9100);
-const printer = new escpos.Printer(device);
+const options = { encoding: "TIS-620" };
+const printer = new escpos.Printer(device, options);
 
-function handlePrint(data) {
+function printNetwork(data) {
   const today = new Date().toLocaleString("en-GB", {
     timeZone: "Asia/Bangkok",
   });
@@ -17,17 +18,15 @@ function handlePrint(data) {
       return error;
     }
     printer.align("ct");
-    printer.encode("TIS-620").text("ร้านหนีงสือบุ๊คทรี");
-    printer
-      .encode("TIS-620")
-      .text("19 ม.2 ต.บางนายสี อ.ตะกั่วป่า จ.พังงา 82110");
-    printer.encode("TIS-620").text("โทร. 076-471499");
-    printer.encode("TIS-620").text("เลขประจำตัวเสียภาษี 1820500068306");
+    printer.text("ร้านหนีงสือบุ๊คทรี");
+    printer.text("19 ม.2 ต.บางนายสี อ.ตะกั่วป่า จ.พังงา 82110");
+    printer.text("โทร. 076-471499");
+    printer.text("เลขประจำตัวเสียภาษี 1820500068306");
     printer.tableCustom([
       { text: "วันที่ " + date, align: "LEFT", width: 0.5 },
       { text: "เวลา " + time, align: "RIGHT", width: 0.5 },
     ]);
-    //   printer.encode("TIS-620").text("เลขสมาชิก 0948025972");
+    //   printer.text("เลขสมาชิก 0948025972");
     printer.drawLine();
     printer.tableCustom(
       [
@@ -36,7 +35,7 @@ function handlePrint(data) {
         { text: "ส่วนลด", align: "CENTER", width: 0.15 },
         { text: "รวม", align: "CENTER", width: 0.3 },
       ],
-      { encoding: "TIS-620", size: [1, 1] }
+      { size: [1, 1] }
     );
     data.items.map((book) => {
       printer.tableCustom(
@@ -60,7 +59,7 @@ function handlePrint(data) {
             width: 0.3,
           },
         ],
-        { encoding: "TIS-620", size: [1, 1] }
+        { size: [1, 1] }
       );
     });
     printer.drawLine();
@@ -105,4 +104,4 @@ function handlePrint(data) {
   });
 }
 
-module.exports = { handlePrint };
+module.exports = { printNetwork };

@@ -1,7 +1,8 @@
 const express = require("express");
-const { handlePrint } = require("./handlePrint.js");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { printNetwork } = require("./printNetwork.js");
+const { printUSB } = require("./printUSB.js");
 const app = express();
 
 const options = {
@@ -11,13 +12,14 @@ app.use(cors(options));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome");
+  res.send("NTP-200K printing service");
 });
 
 app.post("/print", async (req, res) => {
   const data = req.body;
   try {
-    handlePrint(data);
+    //printNetwork(data);
+    printUSB(data);
     res.sendStatus(200);
   } catch (err) {
     console.log(err);

@@ -1,4 +1,3 @@
-//https://zadig.akeo.ie/#google_vignette
 const escpos = require("escpos");
 const USB = require("@node-escpos/usb-adapter");
 const device = new USB();
@@ -19,17 +18,18 @@ function printUSB(data) {
       return error;
     }
     printer.align("ct");
-    printer.encode("TIS-620").text("ร้านหนีงสือบุ๊คทรี");
+    printer.encode("TIS-620").text("ร้านหนังสือบุ๊คทรี");
+
     printer
       .encode("TIS-620")
       .text("19 ม.2 ต.บางนายสี อ.ตะกั่วป่า จ.พังงา 82110");
-    printer.encode("TIS-620").text("โทร. 076-471499");
+    printer.encode("TIS-620").text("โทร. 099-1915521");
     printer.encode("TIS-620").text("เลขประจำตัวเสียภาษี 1820500068306");
     printer.tableCustom([
-      { text: "วันที่ " + date, align: "LEFT", width: 0.5 },
-      { text: "เวลา " + time, align: "RIGHT", width: 0.5 },
+      { text: date, align: "LEFT", width: 0.33 },
+      { text: time, align: "CENTER", width: 0.33 },
+      { text: data.orderNum, align: "RIGHT", width: 0.33 },
     ]);
-    //   printer.encode("TIS-620").text("เลขสมาชิก 0948025972");
     printer.drawLine();
     printer.tableCustom(
       [
@@ -41,13 +41,19 @@ function printUSB(data) {
       { encoding: "TIS-620", size: [1, 1] }
     );
     data.items.map((book) => {
+      let title = "";
+      if(book.title){
+        title = book.title.length > 12
+        ? book.title.substring(0, 12) + "..."
+        : book.title
+      }else{
+        title = "---------"
+      }
       printer.tableCustom(
         [
           {
             text:
-              (book.title.length > 12
-                ? book.title.substring(0, 12) + "..."
-                : book.title) +
+              title +
               " (" +
               book.quantity +
               ")",
